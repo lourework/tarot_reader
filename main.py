@@ -15,8 +15,17 @@ def main():
 
         if choice == "1":
             result = reader.daily_card()
+
             print(f"\n{result['name']}")
-            print(result["meaning"])
+            print("\nTradional meaning:")
+            print(result["api_meaning"])
+
+            if "movie_or_tvshow" in result:
+                print ("\n 🎬 Cultural Reference:")
+                print(result["movie_or_tvshow"])
+                print(result["description_show"])
+                print("\n 💡 Final Advice:")
+                print(result["general_advice"])
 
         elif choice == "2":
             spread = reader.past_present_future()
@@ -26,9 +35,17 @@ def main():
 
         elif choice == "3":
             result = reader.yes_or_no()
+
             print(f"\n{result['name']} ({result['orientation']})")
             print("Answer:", result["answer"])
-            print(result["meaning"])
+            print("\nTradicional meaning:", result["api_meaning"])
+
+            if "movie_or_tvshow" in result:
+                print ("\n 🎬 Cultural Reference:")
+                print(result["movie_or_tvshow"])
+                print(result["description_show"])
+                print("\n 💡 Final Advice:")
+                print(result["general_advice"])
 
         elif choice == "4":
             break

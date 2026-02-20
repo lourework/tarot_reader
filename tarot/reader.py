@@ -1,5 +1,7 @@
 import random
 from .api import get_random_cards
+from .custom_meanings import CUSTOM_MEANINGS
+
 
 class TarotReader:
 
@@ -9,13 +11,21 @@ class TarotReader:
             return
 
         card = cards[0]
+        custom = self.get_custom_meaning(card["name"])
 
-        return {
+        result = {
             "type": "Daily Card",
             "name": card['name'],
-            "meaning": card["meaning_up"],
+            "api_meaning": card["meaning_up"],
             "description": card['desc']
         }
+
+        if custom: 
+            result["movie_or_tvshow"] = custom["movie_or_tvshow"]
+            result["description_show"] = custom["description_show"]
+            result["general_advice"] = custom["general_advice"]
+
+        return result
 
     def past_present_future(self):
         cards = get_random_cards(3)
@@ -40,14 +50,26 @@ class TarotReader:
             return
 
         card = cards[0]
+        custom = self.get_custom_reading(card["name"])
         orientation = random.choice(["upright", "reversed"])
 
         answer = "Yes" if orientation == "upright" else "No"
-        meaning = card["meaning_up"] if orientation == "upright" else card["meaning_rev"]
 
-        return {
+        result = {
             "name": card["name"],
             "orientation": orientation,
             "answer": answer,
-            "meaning": meaning
+            "api_meaning": card["meaning_up"]
         }
+
+        if custom:
+            result.update({
+                "movie_or_tvshow": custom["movie_or_tvshow"],
+                "description_show": custom["description_show"],
+                "general_advice": custom["general_advice"]
+            })
+
+        return result
+    
+    def get_custom_meaning(self, card_name):
+        return CUSTOM_MEANINGS.get(card_name, None)
